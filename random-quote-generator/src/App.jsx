@@ -5,21 +5,28 @@ import { ReactComponent as Twitter } from "../src/assets/icons/twitter.svg"
 import { ReactComponent as Whatsapp } from "../src/assets/icons/whatsapp.svg"
 import "./App.css"
 
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { useEffect, useState } from "react"
+import axios from "axios"
 
 function App() {
   const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
   const [currentQuote, handleCurrentQuote] = useState(0)
   const [prevQuote, handlePrevQuote] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:4000/quotes')
+    setLoading(true)
+
+    axios
+      .get("http://localhost:4000/quotes")
       .then((response) => {
         setData(response.data)
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }, [])
 
@@ -43,45 +50,49 @@ function App() {
 
   return (
     <>
-      <header>
-        <div className="top-strip" />
-      </header>
-      <div className="container">
-        <div className="quotation-box ">
-          <Quotation />
-          {
-            data.map((quotes, i) => {
-              const { quote, author } = quotes
-              return currentQuote === i && (
-                <div className="quote" key={`${author}-${i}`}>
-                  <p>
-                    {quote}
-                  </p>
-                  <span>- {author}</span>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <header>
+            <div className="top-strip" />
+          </header>
+          <div className="container">
+            <div className="quotation-box ">
+              <Quotation />
+              {data.map((quotes, i) => {
+                const { quote, author } = quotes
+                return (
+                  currentQuote === i && (
+                    <div className="quote" key={`${author}-${i}`}>
+                      <p>{quote}</p>
+                      <span>- {author}</span>
+                    </div>
+                  )
+                )
+              })}
+              <div className="bottom-navigation">
+                <div>
+                  <Button
+                    className={classnames("rotate cp")}
+                    onClick={handleBackBtn}
+                  />
+                  <Button className="cp" onClick={updateCurrentQuote} />
                 </div>
-              )
-            })
-          }
-          <div className="bottom-navigation">
-            <div>
-              <Button
-                className={classnames("rotate cp")}
-                onClick={handleBackBtn}
-              />
-              <Button
-                className="cp"
-                onClick={updateCurrentQuote}
-              />
-            </div>
-            <div className="share">
-              <span>Share At:</span>
-              <Twitter title="Post this quote on twitter!" className="cp" />
-              <Whatsapp title="Post this quote on WhatsApp!" className="cp" />
+                <div className="share">
+                  <span>Share At:</span>
+                  <Twitter title="Post this quote on twitter!" className="cp" />
+                  <Whatsapp
+                    title="Post this quote on WhatsApp!"
+                    className="cp"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="bottom-strip" />
+          <div className="bottom-strip" />
+        </>
+      )}
     </>
   )
 }
