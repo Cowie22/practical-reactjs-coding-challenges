@@ -6,29 +6,12 @@ import { ReactComponent as Whatsapp } from "../src/assets/icons/whatsapp.svg"
 import "./App.css"
 
 import { useEffect, useState } from "react"
-import axios from "axios"
+import useQuoteFetcher from './hooks/useQuoteFetcher'
 
 function App() {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
+  const { data, loading } = useQuoteFetcher('http://localhost:4000/quotes')
   const [currentQuote, handleCurrentQuote] = useState(0)
   const [prevQuote, handlePrevQuote] = useState([])
-
-  useEffect(() => {
-    setLoading(true)
-
-    axios
-      .get("http://localhost:4000/quotes")
-      .then((response) => {
-        setData(response.data)
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [])
 
   const updateCurrentQuote = () => {
     let maxIndex = data.length
