@@ -4,15 +4,25 @@ import Input from "../Input"
 import Modal from "../Modal"
 import "./style.scss"
 
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AppContext } from "../../context/state"
 import { taskList } from "../../siteData/taskList"
 
 const AddEditTaskForm = () => {
   const state = useContext(AppContext)
-  const { updateModalOpen } = state
+  const { updateModalOpen, editTask, updateEditTask } = state
   const [input, handleInput] = useState({})
   const [currentPriority, handleCurrentPriority] = useState("")
+
+  useEffect(() => {
+    if (editTask !== null) {
+      const { id, priority, progress, status, title } = editTask
+      handleInput({
+        title: title
+      })
+      handleCurrentPriority(priority)
+    }
+  }, [])
 
   const updateInput = (evt) => {
     const { name, value } = evt.target
@@ -23,13 +33,6 @@ const AddEditTaskForm = () => {
   }
 
   const handleSubmit = () => {
-    if (input.title === "") {
-      return
-    }
-    if (currentPriority === "") {
-      return
-    }
-
     let newTask = {
       id: taskList.length,
       title: input.title,
@@ -42,13 +45,32 @@ const AddEditTaskForm = () => {
     updateModalOpen("addAndEditModal", false)
   }
 
+  const handleEditInput = (evt) => {
+    evt.preventDefault()
+    const { id } = editTask
+    updateModalOpen("addAndEditModal", false)
+
+    return taskList.map((task, i) => {
+      if (task.id === id) {
+        task.title = input.title
+        task.priority = currentPriority
+      }
+    })
+  }
+
   return (
     <Modal>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className="add-edit-modal">
           <div className="flx-between">
             <span className="modal-title">Add Task </span>
-            <Close className="cp" onClick={() => updateModalOpen("addAndEditModal", false)} />
+            <Close
+              className="cp"
+              onClick={() => {
+                updateModalOpen("addAndEditModal", false)
+                updateEditTask(null)
+              }}
+            />
           </div>
           <Input
             label="Task"
@@ -76,8 +98,13 @@ const AddEditTaskForm = () => {
           </div>
           <div className="flx-right mt-50">
             <Button
-              title="Add"
-              onClick={handleSubmit}
+              title={editTask === null ? "Add" :'Edit'}
+              onClick={(evt) => {
+                editTask === null ?
+                handleSubmit()
+                :
+                handleEditInput(evt) && updateEditTask(null)
+              }}
               disabled={input.title === "" || currentPriority === ""}
             />
           </div>

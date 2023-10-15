@@ -10,7 +10,7 @@ import { AppContext } from "../../context/state"
 const TaskCard = ({ task }: any) => {
   const { id, title, priority, status, progress } = task
   const state = useContext(AppContext)
-  const { updateModalOpen, updateDeleteTaskId } = state
+  const { updateModalOpen, updateDeleteTaskId, updateEditTask } = state
 
   return (
     <div className="task-card">
@@ -29,7 +29,13 @@ const TaskCard = ({ task }: any) => {
         <CircularProgressBar strokeWidth={2} sqSize={24} percentage={progress} />
       </div>
       <div className="actions">
-        <EditIcon className="mr-20 cp" onClick={() => updateModalOpen("addAndEditModal", true)} />
+        <EditIcon
+          className="mr-20 cp"
+          onClick={() => {
+            updateEditTask(task)
+            updateModalOpen("addAndEditModal", true)
+          }}
+        />
         <DeleteIcon
           className="cp"
           onClick={() => {

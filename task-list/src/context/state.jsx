@@ -7,7 +7,6 @@ const AppWrapper = ({children}) => {
     addAndEditModal: false,
     deleteModal: false,
   })
-
   const updateModalOpen = (name, bool) => {
     handleModalOpen({
       ...modalOpen,
@@ -16,9 +15,13 @@ const AppWrapper = ({children}) => {
   }
 
   const [deleteTaskId, handleDeleteTaskId] = useState(null)
-
   const updateDeleteTaskId = (val) => {
     handleDeleteTaskId(val)
+  }
+
+  const [editTask, handleEditTask] = useState(null)
+  const updateEditTask = (taskInfo) => {
+    handleEditTask(taskInfo)
   }
 
   const sharedState = {
@@ -26,6 +29,8 @@ const AppWrapper = ({children}) => {
     updateModalOpen,
     deleteTaskId,
     updateDeleteTaskId,
+    editTask,
+    updateEditTask,
   }
 
   return (
