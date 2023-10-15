@@ -4,8 +4,13 @@ import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg"
 import CircularProgressBar from "../CircularProgressBar"
 import "./style.scss"
 
+import { useContext, useState } from "react"
+import { AppContext } from "../../context/state"
+
 const TaskCard = ({ task }: any) => {
   const { id, title, priority, status, progress } = task
+  const state = useContext(AppContext)
+  const { updateModalOpen, updateDeleteTaskId } = state
 
   return (
     <div className="task-card">
@@ -24,8 +29,14 @@ const TaskCard = ({ task }: any) => {
         <CircularProgressBar strokeWidth={2} sqSize={24} percentage={progress} />
       </div>
       <div className="actions">
-        <EditIcon className="mr-20 cp" />
-        <DeleteIcon className="cp" />
+        <EditIcon className="mr-20 cp" onClick={() => updateModalOpen("addAndEditModal", true)} />
+        <DeleteIcon
+          className="cp"
+          onClick={() => {
+            updateDeleteTaskId(id)
+            updateModalOpen("deleteModal", true)
+          }}
+        />
       </div>
     </div>
   )

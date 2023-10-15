@@ -15,9 +15,17 @@ const AppWrapper = ({children}) => {
     })
   }
 
+  const [deleteTaskId, handleDeleteTaskId] = useState(null)
+
+  const updateDeleteTaskId = (val) => {
+    handleDeleteTaskId(val)
+  }
+
   const sharedState = {
     modalOpen,
     updateModalOpen,
+    deleteTaskId,
+    updateDeleteTaskId,
   }
 
   return (

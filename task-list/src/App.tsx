@@ -26,7 +26,9 @@ const App = () => {
         </div>
         <div className="task-container">
           {taskList.map((task) => (
-            <TaskCard task={task} />
+            <div key={task.id}>
+              <TaskCard task={task} />
+            </div>
           ))}
         </div>
       </div>
