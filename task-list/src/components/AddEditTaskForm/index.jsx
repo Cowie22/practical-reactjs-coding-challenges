@@ -18,7 +18,7 @@ const AddEditTaskForm = () => {
     if (editTask !== null) {
       const { id, priority, progress, status, title } = editTask
       handleInput({
-        title: title
+        title: title,
       })
       handleCurrentPriority(priority)
     }
@@ -98,12 +98,9 @@ const AddEditTaskForm = () => {
           </div>
           <div className="flx-right mt-50">
             <Button
-              title={editTask === null ? "Add" :'Edit'}
+              title={editTask === null ? "Add" : "Edit"}
               onClick={(evt) => {
-                editTask === null ?
-                handleSubmit()
-                :
-                handleEditInput(evt) && updateEditTask(null)
+                editTask === null ? handleSubmit() : handleEditInput(evt) && updateEditTask(null)
               }}
               disabled={input.title === "" || currentPriority === ""}
             />
