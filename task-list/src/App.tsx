@@ -6,15 +6,23 @@ import DeleteModal from "./components/DeleteModal"
 import TaskCard from "./components/TaskCard"
 import { taskList } from "./siteData/taskList"
 
+import { useState, useContext } from "react"
+import { AppContext } from "./context/state"
+
 const App = () => {
-  const showAddEditModal = false
-  const showDeleteModal = false
+  const state = useContext(AppContext)
+  const { modalOpen, updateModalOpen } = state
+
   return (
     <div className="container">
       <div className="page-wrapper">
         <div className="top-title">
           <h2>Task List</h2>
-          <Button title="Add Task" icon={<Add />} onClick={() => {}} />
+          <Button
+            title="Add Task"
+            icon={<Add />}
+            onClick={() => updateModalOpen('addAndEditModal', true)}
+          />
         </div>
         <div className="task-container">
           {taskList.map((task) => (
@@ -22,8 +30,8 @@ const App = () => {
           ))}
         </div>
       </div>
-      {showAddEditModal && <AddEditTaskForm />}
-      {showDeleteModal && <DeleteModal />}
+      {modalOpen.addAndEditModal && <AddEditTaskForm />}
+      {modalOpen.deleteModal && <DeleteModal />}
     </div>
   )
 }

@@ -5,7 +5,7 @@ import { ReactComponent as Twitter } from "../src/assets/icons/twitter.svg"
 import { ReactComponent as Whatsapp } from "../src/assets/icons/whatsapp.svg"
 import "./App.css"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import useQuoteFetcher from './hooks/useQuoteFetcher'
 
 function App() {
